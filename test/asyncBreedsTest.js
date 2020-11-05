@@ -1,17 +1,24 @@
-// data in memory
+const assert = require('chai').assert;
+const breedDetailsFromFile = require('../asyncBreeds');
 const catBreeds = {
   'Balinese': "Balinese are curious, outgoing, intelligent cats with excellent communication skills. They are known for their chatty personalities and are always eager to tell you their views on life, love, and what you’ve served them for dinner.",
   'Bombay': "The golden eyes and the shiny black coat of the Bombay is absolutely striking. Likely to bond most with one family member, the Bombay will follow you from room to room and will almost always have something to say about what you are doing, loving attention and to be carried around, often on his caregiver's shoulder."
 };
 
-// synchronous function to fetch a cat breed
-const breedDetails = function(breed) {
-  if (!catBreeds[breed]) return "No description found"
-  return catBreeds[breed];
-};
+describe('#breedDetailsFromFile', () => {
+  it('provides, via callback, breed details for the Bombay breed', (done) => {
+    breedDetailsFromFile('Bombay', (bombay) => {
+      assert.equal(catBreeds['Bombay'], bombay);
+      done(); 
+    });      
+  });
 
-// get the return value right away from the function
-const bombay = breedDetails('Bombay');
-console.log(bombay); //=> prints out the description for that breed
+  it('provides, via callback, undefined for a breed that does not exist', (done) => {
+    breedDetailsFromFile('Saphire', (desc) => {
+      assert.equal(undefined, desc);
+      done(); 
+    });      
+  });
 
-module.exports = breedDetails
+});
+
